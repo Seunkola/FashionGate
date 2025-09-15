@@ -22,10 +22,10 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["../src/**"],
-      "@shared-lib/**": ["../../shared-libs/**"]
+      "@/*": ["src/*"],
+      "@shared/*": ["../../shared-libs/*"]  
     },
   },
-  "include": ["src/**/**", "../../shared-libs/**/**"],
+  "include": ["src/**/*", "../../shared-libs/**/*"],
   "exclude": ["node_modules", "dist", "tests", "**/*.test.ts"]
 }
