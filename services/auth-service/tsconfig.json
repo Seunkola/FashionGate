@@ -1,30 +1,42 @@
 {
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    "target": "es2020",
+    "target": "ES2020",
     "module": "commonjs",
     "lib": ["ES2020"],
+
     "outDir": "./dist",
     "strict": true,
+
+    // Interop & Module Resolution
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
     "resolveJsonModule": true,
+
+    // Debugging & Declarations
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
+
+    // Type Checking
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
+
+    // Ensure Node.js types are included
+    "types": ["node"],
+
+    // Path Aliases
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
-      "@shared/*": ["../../shared-libs/*"]  
-    },
+      "@shared/*": ["../../shared-libs/*"]
+    }
   },
   "include": ["src/**/*", "../../shared-libs/**/*"],
   "exclude": ["node_modules", "dist", "tests", "**/*.test.ts"]
