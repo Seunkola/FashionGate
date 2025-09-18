@@ -101,3 +101,103 @@ export async function createPortfolio(req: Request, res: Response) {
     return res.error("INTERNAL_SERVER_ERROR", "Something went wrong", 500);
   }
 }
+
+export async function getPortfolios(req: Request, res: Response) {
+  try {
+    // default pagination values
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const [portfolios, total] = await Promise.all([
+      prisma.portfolio.findMany({
+        skip,
+        take: limit,
+        include: {
+          designer: {
+            select: {
+              id: true,
+              first_name: true,
+              last_name: true,
+              profile_image_url: true,
+            },
+          },
+          images: true, // Include portfolio images
+          skills: {
+            include: { skill: true }, // Include skill details
+          },
+          ratings: true, // Include ratings to calculate average
+        },
+        orderBy: { created_at: "desc" },
+      }),
+      prisma.portfolio.count(),
+    ]);
+
+    // If no portfolios found, return empty array
+    if (total === 0) {
+      return res.success({ portfolios: [] }, "No Portfolios Available");
+    }
+
+    return res.success(
+      {
+        portfolios,
+        pagination: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      },
+      "Portfolios retrieved successfully"
+    );
+  } catch (error) {
+    return res.error("INTERNAL_SERVER_ERROR", "Something went wrong", 500);
+  }
+}
+
+export async function getPortfolioById(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.error("BAD_REQUEST", "Portfolio ID is required", 400);
+    }
+
+    const portfolio = await prisma.portfolio.findUnique({
+      where: { id },
+      include: {
+        designer: {
+          select: {
+            id: true,
+            first_name: true,
+            last_name: true,
+            profile_image_url: true,
+            email: true,
+          },
+        },
+        images: true, // Include portfolio images
+        skills: {
+          include: { skill: true }, // Include skill details
+        },
+        ratings: true, // Include ratings to calculate average
+      },
+    });
+
+    if (!portfolio) {
+      return res.error("NOT_FOUND", "Portfolio not found", 404);
+    }
+
+    // Calculate average rating
+    const averageRating = portfolio.ratings.length
+      ? portfolio.ratings.reduce((sum, r) => sum + r.rating, 0) /
+        portfolio.ratings.length
+      : null;
+
+    return res.success(
+      { portfolio: { ...portfolio, averageRating } },
+      "Portfolio retrieved successfully"
+    );
+  } catch (error) {
+    return res.error("INTERNAL_SERVER_ERROR", "Something went wrong", 500);
+  }
+}
