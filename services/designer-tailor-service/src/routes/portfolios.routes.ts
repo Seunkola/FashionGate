@@ -5,6 +5,9 @@ import {
   createPortfolio,
   getPortfolios,
   getPortfolioById,
+  updatePortfolio,
+  deletePortfolioImage,
+  deletePortfolio,
 } from "@/controllers/portfolio.controller";
 
 const upload = multer({ storage: multer.memoryStorage() });
@@ -22,5 +25,22 @@ router.post(
 router.get("/", rbacAuthMiddleware, getPortfolios);
 
 router.get("/:id", rbacAuthMiddleware, getPortfolioById);
+
+router.put(
+  "/:id",
+  rbacAuthMiddleware,
+  requiredRole,
+  upload.array("images"),
+  updatePortfolio
+);
+
+router.delete("/:id", rbacAuthMiddleware, requiredRole, deletePortfolio);
+
+router.delete(
+  "/:portfolioId/images/:imageId",
+  rbacAuthMiddleware,
+  requiredRole,
+  deletePortfolioImage
+);
 
 export default router;
