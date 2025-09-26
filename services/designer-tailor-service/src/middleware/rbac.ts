@@ -57,7 +57,6 @@ export async function rbacAuthMiddleware(
 // RBAC middleware check for roles
 export function requiredRole(req: Request, res: Response, next: NextFunction) {
   const user = (req as any).user;
-  console.log(user);
   if (!user || (user.role !== "designer" && user.role !== "tailor")) {
     return res.error(
       "FORBIDDEN",
