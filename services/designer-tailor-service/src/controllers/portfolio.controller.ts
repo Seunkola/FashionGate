@@ -113,7 +113,11 @@ export async function getPortfolios(req: Request, res: Response) {
       prisma.portfolio.findMany({
         skip,
         take: limit,
-        include: {
+        orderBy: { created_at: "desc" },
+        select: {
+          id: true,
+          title: true,
+          description: true,
           designer: {
             select: {
               id: true,
@@ -122,13 +126,19 @@ export async function getPortfolios(req: Request, res: Response) {
               profile_image_url: true,
             },
           },
-          images: true, // Include portfolio images
-          skills: {
-            include: { skill: true }, // Include skill details
+          images: {
+            take: 1,
+            select: { image_url: true },
           },
-          ratings: true, // Include ratings to calculate average
+          skills: {
+            select: {
+              skill: { select: { name: true } },
+            },
+          },
+          ratings: {
+            select: { rating: true },
+          },
         },
-        orderBy: { created_at: "desc" },
       }),
       prisma.portfolio.count(),
     ]);
@@ -458,4 +468,4 @@ export async function deletePortfolioImage(req: Request, res: Response) {
   } catch (error) {
     return res.error("INTERNAL_SERVER_ERROR", "Something went wrong", 500);
   }
-} // awaiting tests
+}
