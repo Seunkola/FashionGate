@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { prisma } from "@/services/prismaClient";
-import { supabase } from "@/services/supabaseClient";
 
 // Designers and tailors can create services
 export async function createService(req: Request, res: Response) {
