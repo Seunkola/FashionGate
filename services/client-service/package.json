@@ -1,7 +1,7 @@
 {
   "name": "client-service",
   "version": "1.0.0",
-  "description": "Microservice to handle client services such as profile management and booking services",
+  "description": "Microservice to handle client services such as profile management",
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch -r tsconfig-paths/register -r dotenv/config src/server.ts",
