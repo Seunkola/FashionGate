@@ -1,43 +1,23 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "commonjs",
-    "lib": ["ES2020"],
-
-    "outDir": "./dist",
-    "strict": true,
-
-    // Interop & Module Resolution
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-
-    // Debugging & Declarations
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-
-    // Type Checking
-    "skipLibCheck": true,
+    "target": "ES2020", // Output modern JS
+    "module": "CommonJS", // For Node.js compatibility
+    "rootDir": "./", // Where your TS source files live
+    "outDir": "dist", // Where compiled JS files go
+    "esModuleInterop": true, // Enables import default syntax
+    "strict": true, // Enforce strong typing
+    "skipLibCheck": true, // Speeds up type checking
     "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-
-    // Ensure Node.js types are included
-    "types": ["node"],
-
+    "moduleResolution": "node",
+    "resolveJsonModule": true, // Lets you import JSON files
+    "sourceMap": true, // Useful for debugging
     // Path Aliases
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
-      "@shared/*": ["../../shared-libs/*"]
+      "@shared/*": ["shared-libs/*"]
     }
   },
-  "include": ["src/**/*", "../../shared-libs/**/*"],
+  "include": ["src", "shared-libs"], // Only compile your src folder
   "exclude": ["node_modules", "dist", "tests", "**/*.test.ts"]
 }
